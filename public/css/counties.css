@@ -1,0 +1,10 @@
+.county {
+	fill-opacity: 0;
+	stroke: green;
+	stroke-width: 2;
+}
+
+.county:hover {
+	stroke: blue;
+	cursor: pointer;
+}
