@@ -6,7 +6,7 @@ window.onload = function() {
   var height = window.innerHeight;
 
   var zoom = d3.behavior.zoom()
-    .scaleExtent([ 0.1, 3 ])
+    .scaleExtent([ 0.05, 3 ])
     .on("zoom", zoomed);
 
   var svg = d3.select("#vis")
