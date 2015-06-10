@@ -3,7 +3,9 @@ var app = express();
 
 app.use(express.static('public'));
 
-var server = app.listen(3000, function() {
+var appPort = process.env.PORT || 3000;
+
+var server = app.listen(appPort, function() {
 	
 	var host = server.address().address;
 	var port = server.address().port;
