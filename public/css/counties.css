@@ -1,11 +1,11 @@
 .county {
-	/*fill-opacity: 0;
-	stroke: green;
-	stroke-width: 2;*/
+	fill: #AAA;
+	/*fill-opacity: 0;*/
+	stroke: #2A3411;
+	stroke-width: 0.001;
 }
 
-.county:hover {
-	/*stroke: blue;*/
-	fill: blue;
-	cursor: pointer;
-}
+	.county:hover {
+		fill-opacity: 0.5;
+		cursor: pointer;
+	}
