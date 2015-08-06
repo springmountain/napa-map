@@ -32,10 +32,10 @@ window.onload = function() {
 
       if (error) return console.error(error);
 
-      container.selectAll(".county")
+      container.selectAll(".ava")
           .data(land.features)
         .enter().append("path")
-          .attr("class", function(d) { return "county"; })
+          .attr("class", function(d) { return "ava"; })
           .attr("title", function(d) { return d.properties.AVA_Name; })
           .attr("d", path)
         .insert("circle")
