@@ -1,11 +1,11 @@
-.county {
+.ava {
 	fill: #AAA;
 	/*fill-opacity: 0;*/
 	stroke: #2A3411;
 	stroke-width: 0.001;
 }
 
-	.county:hover {
+	.ava:hover {
 		fill-opacity: 0.5;
 		cursor: pointer;
 	}
