@@ -13,7 +13,7 @@ window.onload = function() {
     .projection(projection);
 
   var zoom = d3.behavior.zoom()
-    .scaleExtent([ 0.05, 3 ])
+    // .scaleExtent([ 0.05, 3 ])
     .on("zoom", zoomed);
 
   svg = d3.select("#vis")
@@ -32,39 +32,13 @@ window.onload = function() {
 
       if (error) return console.error(error);
 
-      container.selectAll(".ava")
-          .data(land.features)
-        .enter().append("path")
-          .attr("class", function(d) { return "ava"; })
-          .attr("title", function(d) { return d.properties.AVA_Name; })
-          .attr("d", path)
-        .insert("circle")
-          .attr("cx", function(d) {
-            var parentBBox = d3.select(this.parentNode).node().getBBox();
-            console.log( parentBBox );
+      var avas = container.selectAll(".ava").data(land.features).enter();
 
-            return parentBBox.x + parentBBox.width/2;
-          })
-          .attr("cy", function(d) {
-            var parentBBox = d3.select(this.parentNode).node().getBBox();
-
-            return parentBBox.y + parentBBox.height/2;
-          })
-          .attr("r", 100);
-        // .append("text")
-        //   .attr("x", function(d) {
-        //     var parentBBox = d3.select(this.parentNode).node().getBBox();
-        //     console.log( parentBBox );
-
-        //     return parentBBox.x + parentBBox.width/2;
-        //   })
-        //   .attr("y", function(d) {
-        //     var parentBBox = d3.select(this.parentNode).node().getBBox();
-
-        //     return parentBBox.y + parentBBox.height/2;
-        //   })
-        //   .attr("font-size", 55)
-        //   .text(function(d) { return d.properties.AVA_Name; });
+      avas.append("path")
+        .attr("class", function(d) { return "ava"; })
+        .attr("title", function(d) { return d.properties.AVA_Name; })
+        .attr("id", function(d) { return d.properties.AVA_Name.replace(/\s/g, ''); })
+        .attr("d", path);
 
       d3.json("data/geojson/Winery_locations_qgis.json", function(error, wineries) {
 
@@ -81,7 +55,20 @@ window.onload = function() {
 
       });
 
-      //console.log(container.node().getBBox());
+      avas.append("text")
+        .attr("x", function(d) {
+          var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
+          console.log( d );
+
+          return parentBBox.x + parentBBox.width/2;
+        })
+        .attr("y", function(d) {
+          var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
+
+          return parentBBox.y + parentBBox.height/2;
+        })
+        .attr("font-size", 0.015)
+        .text(function(d) { return d.properties.AVA_Name; });
 
       var groupBoundingBox = container.node().getBBox();
 
