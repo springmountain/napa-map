@@ -2,9 +2,6 @@
 var svg;
 
 window.onload = function() {
-  // var width = 2400;
-  // var height = 3200;
-
   var width = window.innerWidth;
   var height = window.innerHeight;
 
@@ -13,7 +10,7 @@ window.onload = function() {
     .projection(projection);
 
   var zoom = d3.behavior.zoom()
-    // .scaleExtent([ 0.05, 3 ])
+    //.scaleExtent([ 0.05, 3 ])
     .on("zoom", zoomed);
 
   svg = d3.select("#vis")
@@ -40,6 +37,17 @@ window.onload = function() {
         .attr("id", function(d) { return d.properties.AVA_Name.replace(/\s/g, ''); })
         .attr("d", path);
 
+      var groupBoundingBox = container.node().getBBox();
+
+      console.log( groupBoundingBox );
+
+      svg.attr("viewBox",
+        groupBoundingBox.x + " "
+        + groupBoundingBox.y + " "
+        + groupBoundingBox.width + " "
+        + groupBoundingBox.height
+      );
+
       d3.json("data/geojson/Winery_locations_qgis.json", function(error, wineries) {
 
         if (error) return console.error(error);
@@ -58,7 +66,7 @@ window.onload = function() {
       avas.append("text")
         .attr("x", function(d) {
           var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
-          console.log( d );
+          //console.log( d );
 
           return parentBBox.x + parentBBox.width/2;
         })
@@ -70,14 +78,6 @@ window.onload = function() {
         .attr("font-size", 0.015)
         .text(function(d) { return d.properties.AVA_Name; });
 
-      var groupBoundingBox = container.node().getBBox();
-
-      svg.attr("viewBox",
-        groupBoundingBox.x + " "
-        + groupBoundingBox.y + " "
-        + groupBoundingBox.width + " "
-        + groupBoundingBox.height
-      );
     });
 
     function zoomed() {
