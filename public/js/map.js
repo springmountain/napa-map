@@ -1,7 +1,24 @@
 // Declare variables I want to be accessible from the console.
-var svg;
+var svg, container;
 
 window.onload = function() {
+
+  parseJSON();
+
+};
+
+function parseJSON(){
+  queue()
+    .defer(d3.json, "data/geojson/ava_Napa_County_qgis.json")
+    .defer(d3.json, "data/geojson/Winery_locations_qgis.json")
+    .await(drawMap);
+}
+
+function drawMap(err, avas, wineries) {
+  //results is an array of each of your csv results
+  console.log(avas);
+  console.log(wineries);
+
   var width = window.innerWidth;
   var height = window.innerHeight;
 
@@ -22,65 +39,85 @@ window.onload = function() {
       .attr("preserveAspectRatio", "xMidYMid meet")
       .call(zoom);
   
-  var container = svg.append("g")
+  container = svg.append("g")
     .attr("id", "zoomGroup")
 
-    d3.json("data/geojson/ava_Napa_County_qgis.json", function(error, land) {
+  container.selectAll(".ava").data(avas.features).enter()
+    .append("path")
+    .attr("class", function(d) { return "ava"; })
+    .attr("title", function(d) { return d.properties.AVA_Name; })
+    .attr("id", function(d) { return d.properties.AVA_Name.replace(/\s/g, ''); })
+    .attr("d", path);
 
-      if (error) return console.error(error);
+    var groupBoundingBox = container.node().getBBox();
 
-      var avas = container.selectAll(".ava").data(land.features).enter();
+    // console.log( groupBoundingBox );
 
-      avas.append("path")
-        .attr("class", function(d) { return "ava"; })
-        .attr("title", function(d) { return d.properties.AVA_Name; })
-        .attr("id", function(d) { return d.properties.AVA_Name.replace(/\s/g, ''); })
-        .attr("d", path);
+    svg.attr("viewBox",
+      groupBoundingBox.x + " "
+      + groupBoundingBox.y + " "
+      + groupBoundingBox.width + " "
+      + groupBoundingBox.height
+    );
 
-      var groupBoundingBox = container.node().getBBox();
+    container.selectAll(".winery").data(wineries.features).enter()
+      .append("circle")
+      .attr("class", function(d) { return "winery"; })
+      .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
+      .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
+      .attr("r", "0.005");
 
-      console.log( groupBoundingBox );
+    container.selectAll(".ava-label").data(avas.features).enter()
+      .append("text")
+      .attr("x", function(d) {
+        var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
+        //console.log( d );
 
-      svg.attr("viewBox",
-        groupBoundingBox.x + " "
-        + groupBoundingBox.y + " "
-        + groupBoundingBox.width + " "
-        + groupBoundingBox.height
-      );
+        return parentBBox.x + parentBBox.width/2;
+      })
+      .attr("y", function(d) {
+        var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
 
-      d3.json("data/geojson/Winery_locations_qgis.json", function(error, wineries) {
+        return parentBBox.y + parentBBox.height/2;
+      })
+      .attr("font-size", 0.015)
+      .text(function(d) { return d.properties.AVA_Name; });
 
-        if (error) return console.error(error);
+    // // d3.json("data/geojson/Winery_locations_qgis.json", function(error, wineries) {
 
-        container.selectAll(".winery")
-            .data(wineries.features)
-          .enter().append("circle")
-            .attr("class", function(d) { return "winery"; })
-            //.attr("d", d3.geo.path());
-            .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
-            .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
-            .attr("r", "0.005");
+    //   var wineriesGroup = container.append("g")
+    //   .attr("id", "wineriesGroup");
 
-      });
+    //   if (error) return console.error(error);
 
-      avas.append("text")
-        .attr("x", function(d) {
-          var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
-          //console.log( d );
+    //   wineriesGroup.selectAll(".winery")
+    //       .data(wineries.features)
+    //     .enter().append("circle")
+    //       .attr("class", function(d) { return "winery"; })
+    //       //.attr("d", d3.geo.path());
+    //       .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
+    //       .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
+    //       .attr("r", "0.005");
 
-          return parentBBox.x + parentBBox.width/2;
-        })
-        .attr("y", function(d) {
-          var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
+    // // });
 
-          return parentBBox.y + parentBBox.height/2;
-        })
-        .attr("font-size", 0.015)
-        .text(function(d) { return d.properties.AVA_Name; });
+    // avas.append("text")
+    //   .attr("x", function(d) {
+    //     var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
+    //     //console.log( d );
 
-    });
+    //     return parentBBox.x + parentBBox.width/2;
+    //   })
+    //   .attr("y", function(d) {
+    //     var parentBBox = d3.select( "#" + d.properties.AVA_Name.replace(/\s/g, '') ).node().getBBox();
 
-    function zoomed() {
-      container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    }
-};
+    //     return parentBBox.y + parentBBox.height/2;
+    //   })
+    //   .attr("font-size", 0.015)
+    //   .text(function(d) { return d.properties.AVA_Name; });
+
+}
+
+function zoomed() {
+  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
