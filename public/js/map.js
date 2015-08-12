@@ -3,24 +3,51 @@ var svg, container, map, markers;
 
 window.onload = function() {
 
-  map = new OpenLayers.Map("vis");
-  var mapnik = new OpenLayers.Layer.OSM();
-  map.addLayer(mapnik);
+  // map = new ol.Map("vis");
 
-  var lonlat = new OpenLayers.LonLat(-122.3472, 38.4001).transform(
-    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-    new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator
-  );
+  var osmLayer = new ol.layer.Tile({
+    source: new ol.source.OSM()
+  })
 
-  var zoom = 11;
+  var wineryLayer = new ol.layer.Vector({
+    // source: new ol.source.GeoJSON({
+    //   projection: 'EPSG:4326',
+    //   url: 'data/geojson/Winery_public_qgis.json'
+    // })
+  });
 
-  markers = new OpenLayers.Layer.Markers( "Markers" );
-  map.addLayer(markers);
+  map = new ol.Map({
+    layers: [
+      osmLayer,
+      wineryLayer
+    ],
+    target: 'vis',
+    view: new ol.View({
+      //projection: 'EPSG:4326',
+      center: ol.proj.transform( [-122.3472, 38.4001], 'EPSG:4326', 'EPSG:900913'), //[-122.3472, 38.4001],
+      zoom: 11
+    })
+  });
+
+  // var mapnik = new ol.layer.OSM();
+  //map.addLayer(osmLayer);
+
+  // var lonlat = new ol.LonLat(-122.3472, 38.4001).transform(
+  //   new ol.Projection("EPSG:4326"), // transform from WGS 1984
+  //   new ol.Projection("EPSG:900913") // to Spherical Mercator
+  // );
+
+  //var lonlat = ol.projection.transform( new ol.Coordinate( -122.3472, 38.4001 ), 'ESPG:4326', 'ESPG:900913' );
+
+  //var zoom = 11;
+
+  // markers = new ol.Layer.Markers( "Markers" );
+  // map.addLayer(markers);
 
 
-  map.setCenter(lonlat, zoom);
+  // map.setCenter(lonlat, zoom);
 
-  parseJSON();
+  //parseJSON();
 
 };
 
@@ -111,11 +138,11 @@ function drawMap(err, avas, wineries) {
   wineries.features.forEach(function(element, index){
     //console.log(element.geometry.coordinates);
 
-    var lonlat = new OpenLayers.LonLat( element.geometry.coordinates[0], element.geometry.coordinates[1] ).transform(
-      new OpenLayers.Projection("EPSG:4326"),
-      new OpenLayers.Projection("EPSG:900913") );
+    var lonlat = new ol.LonLat( element.geometry.coordinates[0], element.geometry.coordinates[1] ).transform(
+      new ol.Projection("EPSG:4326"),
+      new ol.Projection("EPSG:900913") );
 
-    var winery = new OpenLayers.Marker( lonlat );
+    var winery = new ol.Marker( lonlat );
     winery.name = element.properties.Name;
     winery.events.register('mousedown', winery, function(e) {
       console.log(winery.name);
