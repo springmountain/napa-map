@@ -7,18 +7,26 @@ window.onload = function() {
 
   var osmLayer = new ol.layer.Tile({
     source: new ol.source.OSM()
-  })
+  });
+
+  var avaLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      url: 'data/geojson/ava_Napa_County_qgis.json',
+      format: new ol.format.GeoJSON()
+    })
+  });
 
   var wineryLayer = new ol.layer.Vector({
-    // source: new ol.source.GeoJSON({
-    //   projection: 'EPSG:4326',
-    //   url: 'data/geojson/Winery_public_qgis.json'
-    // })
+    source: new ol.source.Vector({
+      url: 'data/geojson/Winery_public_qgis.json',
+      format: new ol.format.GeoJSON()
+    })
   });
 
   map = new ol.Map({
     layers: [
       osmLayer,
+      avaLayer,
       wineryLayer
     ],
     target: 'vis',
@@ -47,7 +55,7 @@ window.onload = function() {
 
   // map.setCenter(lonlat, zoom);
 
-  //parseJSON();
+  parseJSON();
 
 };
 
@@ -135,21 +143,21 @@ function drawMap(err, avas, wineries) {
   *   Draw winery locations
   */
 
-  wineries.features.forEach(function(element, index){
-    //console.log(element.geometry.coordinates);
+  // wineries.features.forEach(function(element, index){
+  //   //console.log(element.geometry.coordinates);
 
-    var lonlat = new ol.LonLat( element.geometry.coordinates[0], element.geometry.coordinates[1] ).transform(
-      new ol.Projection("EPSG:4326"),
-      new ol.Projection("EPSG:900913") );
+  //   var lonlat = new ol.LonLat( element.geometry.coordinates[0], element.geometry.coordinates[1] ).transform(
+  //     new ol.Projection("EPSG:4326"),
+  //     new ol.Projection("EPSG:900913") );
 
-    var winery = new ol.Marker( lonlat );
-    winery.name = element.properties.Name;
-    winery.events.register('mousedown', winery, function(e) {
-      console.log(winery.name);
-    });
+  //   var winery = new ol.Marker( lonlat );
+  //   winery.name = element.properties.Name;
+  //   winery.events.register('mousedown', winery, function(e) {
+  //     console.log(winery.name);
+  //   });
 
-    markers.addMarker( winery );
-  });
+  //   wineryLayer.addMarker( winery );
+  // });
 
   // container.selectAll(".winery").data(wineries.features).enter()
   //   .append("circle")
