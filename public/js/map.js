@@ -22,22 +22,22 @@ window.onload = function() {
     })
   });
 
-  map = new ol.Map({
-    interactions: ol.interaction.defaults().extend([
-      new ol.interaction.Select({
-        style: new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 5,
-            fill: new ol.style.Fill({
-              color: '#FF0000'
-            }),
-            stroke: new ol.style.Stroke({
-              color: '#000000'
-            })
-          })
+  var winerySelect = new ol.interaction.Select({
+    style: new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 5,
+        fill: new ol.style.Fill({
+          color: '#FF0000'
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#000000'
         })
       })
-    ]),
+    })
+  });
+
+  map = new ol.Map({
+    interactions: ol.interaction.defaults().extend([ winerySelect ]),
     layers: [
       osmLayer,
       avaLayer,
@@ -50,5 +50,38 @@ window.onload = function() {
       zoom: 11
     })
   });
-};
 
+  var popup = new ol.Overlay({
+    element: document.getElementById('winery-info')
+  });
+
+  // popup.setPosition(coordinate);
+  map.addOverlay(popup);
+
+  winerySelect.on('select', function(e) {
+
+    //console.log(e);
+
+    if (e.selected.length > 0) {
+      // If a winery is selected during the interaction.
+      popup.setPosition(e.mapBrowserEvent.coordinate);
+
+      // Get winery data for displaying in the popup.
+      var wineryData = e.selected[0].getProperties();
+
+      console.log(wineryData);
+
+      // Fill the popup with the winery data.
+      popup.getElement().innerHTML = toTitleCase(wineryData.Name);
+    }
+    else {
+      // Hide popup if something is not selected during the interaction.
+      popup.setPosition();
+    }
+  });
+
+  // handle capitalizing the first letter of each word in a string.
+  function toTitleCase(str) {
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  }
+};
