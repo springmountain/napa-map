@@ -45,7 +45,6 @@ window.onload = function() {
     ],
     target: 'vis',
     view: new ol.View({
-      //projection: 'EPSG:4326',
       center: ol.proj.transform( [-122.3472, 38.4001], 'EPSG:4326', 'EPSG:900913'), //[-122.3472, 38.4001],
       zoom: 11
     })
@@ -55,24 +54,29 @@ window.onload = function() {
     element: document.getElementById('winery-info')
   });
 
-  // popup.setPosition(coordinate);
   map.addOverlay(popup);
 
   winerySelect.on('select', function(e) {
 
-    //console.log(e);
-
-    if (e.selected.length > 0) {
-      // If a winery is selected during the interaction.
-      popup.setPosition(e.mapBrowserEvent.coordinate);
+    if (e.selected.length > 0) {  // If a winery is selected during the interaction.
 
       // Get winery data for displaying in the popup.
       var wineryData = e.selected[0].getProperties();
 
-      console.log(wineryData);
+      // Query google's custom search to get images/stuff.
+      var wineryRequest = new XMLHttpRequest();
+      wineryRequest.addEventListener('load', googleHandler);
+      wineryRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCtH-7DOIQP9xEndlnJiICZr-8p7PxsgHw&cx=008567402695360145736:-ogjat11zvw&searchType=image&q=' + encodeURIComponent(wineryData.Name));
+      wineryRequest.send();
+
+      // Display the popup at the position the user clicked.
+      popup.setPosition(e.mapBrowserEvent.coordinate);
 
       // Fill the popup with the winery data.
-      popup.getElement().innerHTML = toTitleCase(wineryData.Name);
+      var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
+      popupHTML += '<h4>Est: ' + wineryData.Estab_date + '</h4>';
+
+      popup.getElement().innerHTML = popupHTML;
     }
     else {
       // Hide popup if something is not selected during the interaction.
@@ -83,5 +87,32 @@ window.onload = function() {
   // handle capitalizing the first letter of each word in a string.
   function toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  }
+
+  function googleHandler() {
+    var response = JSON.parse(this.responseText);
+    console.log(response);
+
+    if (response.items.length > 0) {
+
+      var thumbnailContainer = document.createElement('div');
+      thumbnailContainer.className = 'thumbnail-container';
+
+      response.items.forEach(function(element, index){
+
+        var image = document.createElement('img');
+
+        image.src = element.link;
+        image.className = 'thumbnail';
+
+        thumbnailContainer.appendChild(image);
+
+        // popup.getElement().innerHTML += '<img class="thumbnail" src="' + element.link + '">';
+    
+
+      });
+
+      popup.getElement().appendChild(thumbnailContainer);
+    }
   }
 };

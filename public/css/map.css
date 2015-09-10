@@ -4,6 +4,7 @@ html, body {
 	padding: 0;
 	width: 100%;
 	height: 100%;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 .container {
@@ -26,8 +27,26 @@ html, body {
 }
 
 .popup {
-	width: 300px;
-	height: 140px;
+	width: 340px;
+	height: 215px;
 	border: 1px solid black;
 	background: #fff;
+	padding: 1em;
 }
+
+	.popup h3 {
+		font-size: 1.2em;
+		margin-bottom: 0.5em;
+	}
+
+	.popup .thumbnail-container {
+		height: 170px;
+		width: 340px;
+		overflow: scroll;
+	}
+
+	.popup img.thumbnail {
+		max-height: 150px;
+		max-width: 150px;
+		padding: 5px;
+	}
