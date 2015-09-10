@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/springmountain/napa-map",
   "dependencies": {
-    "express": "^4.12.4"
+    "express": "^4.12.4",
+    "pg": "4.4.1"
   }
 }

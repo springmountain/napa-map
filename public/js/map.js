@@ -67,10 +67,20 @@ window.onload = function() {
       var wineryRequest = new XMLHttpRequest();
       wineryRequest.addEventListener('load', googleHandler);
       wineryRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCtH-7DOIQP9xEndlnJiICZr-8p7PxsgHw&cx=008567402695360145736:-ogjat11zvw&searchType=image&q=' + encodeURIComponent(wineryData.Name));
-      wineryRequest.send();
+      // wineryRequest.send();
 
       // Display the popup at the position the user clicked.
       popup.setPosition(e.mapBrowserEvent.coordinate);
+
+      // Animation classes
+      // -----------------
+      // This timeout is required because Openlayers makes the state change
+      // using the "display" property, which cannot be animated using css
+      // animations. I know it's hacky, but right now it's the best solution.
+      setTimeout(function() {
+        popup.getElement().classList.add('open');
+      }, 5);
+      
 
       // Fill the popup with the winery data.
       var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
@@ -81,7 +91,14 @@ window.onload = function() {
     }
     else {
       // Hide popup if something is not selected during the interaction.
-      popup.setPosition();
+      popup.getElement().classList.remove('open');
+
+      // This timeout waits for the .open class removal animation to
+      // complete before .setPosition() can change the popup's 
+      // display property, which messes up the animation.
+      setTimeout(function() {
+        popup.setPosition();
+      }, 500);
     }
   });
 
@@ -101,23 +118,18 @@ window.onload = function() {
 
       response.items.forEach(function(element, index){
 
+        var thumbnail = document.createElement('div');
+        thumbnail.className = 'thumbnail';
+
         var image = document.createElement('img');
-
         image.src = element.link;
-        image.className = 'thumbnail';
 
-        thumbnailContainer.appendChild(image);
-
-        // popup.getElement().innerHTML += '<img class="thumbnail" src="' + element.link + '">';
-    
+        thumbnail.appendChild(image);
+        thumbnailContainer.appendChild(thumbnail);
 
       });
 
       popup.getElement().appendChild(thumbnailContainer);
-
-      thumbnailContainer = document.querySelector('#winery-info .thumbnail-container');
-
-      // thumbnailContainer.offsetHeight
     }
   }
 };
