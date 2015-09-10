@@ -28,7 +28,7 @@ html, body {
 
 .popup {
 	width: 340px;
-	height: 215px;
+	/*height: 215px;*/
 	border: 1px solid black;
 	background: #fff;
 	padding: 1em;
@@ -46,9 +46,10 @@ html, body {
 	}
 
 	.popup .thumbnail-container {
-		height: 170px;
+		height: 160px;
 		width: 340px;
-		overflow: scroll;
+		overflow-y: scroll;
+		overflow-x: none;
 	}
 
 	.popup img.thumbnail {

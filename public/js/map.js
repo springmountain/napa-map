@@ -114,6 +114,10 @@ window.onload = function() {
       });
 
       popup.getElement().appendChild(thumbnailContainer);
+
+      thumbnailContainer = document.querySelector('#winery-info .thumbnail-container');
+
+      // thumbnailContainer.offsetHeight
     }
   }
 };
