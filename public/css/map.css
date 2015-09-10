@@ -32,11 +32,17 @@ html, body {
 	border: 1px solid black;
 	background: #fff;
 	padding: 1em;
+	box-shadow: gray 5px 5px 5px;
 }
 
 	.popup h3 {
 		font-size: 1.2em;
-		margin-bottom: 0.5em;
+		margin-bottom: 0.3em;
+	}
+
+	.popup h4 {
+		color: #888;
+		margin-bottom: 0.3em;
 	}
 
 	.popup .thumbnail-container {

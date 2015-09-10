@@ -74,7 +74,8 @@ window.onload = function() {
 
       // Fill the popup with the winery data.
       var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
-      popupHTML += '<h4>Est: ' + wineryData.Estab_date + '</h4>';
+      popupHTML += '<h4>' + wineryData.AVA + '</h4>';
+      popupHTML += '<h5>Est: ' + wineryData.Estab_date + '</h5>';
 
       popup.getElement().innerHTML = popupHTML;
     }
