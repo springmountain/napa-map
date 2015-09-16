@@ -63,31 +63,44 @@ window.onload = function() {
       // Get winery data for displaying in the popup.
       var wineryData = e.selected[0].getProperties();
 
-      // Query google's custom search to get images/stuff.
-      var wineryRequest = new XMLHttpRequest();
-      wineryRequest.addEventListener('load', googleHandler);
-      wineryRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCtH-7DOIQP9xEndlnJiICZr-8p7PxsgHw&cx=008567402695360145736:-ogjat11zvw&searchType=image&q=' + encodeURIComponent(wineryData.Name));
-      // wineryRequest.send();
+      if (typeof wineryData.AVA != 'undefined') {
+        // Query google's custom search to get images/stuff.
+        var wineryRequest = new XMLHttpRequest();
+        wineryRequest.addEventListener('load', googleHandler);
+        wineryRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCtH-7DOIQP9xEndlnJiICZr-8p7PxsgHw&cx=008567402695360145736:-ogjat11zvw&searchType=image&q=' + encodeURIComponent(wineryData.Name));
+        // wineryRequest.send();
 
-      // Display the popup at the position the user clicked.
-      popup.setPosition(e.mapBrowserEvent.coordinate);
+        // Display the popup at the position the user clicked.
+        popup.setPosition(e.mapBrowserEvent.coordinate);
 
-      // Animation classes
-      // -----------------
-      // This timeout is required because Openlayers makes the state change
-      // using the "display" property, which cannot be animated using css
-      // animations. I know it's hacky, but right now it's the best solution.
-      setTimeout(function() {
-        popup.getElement().classList.add('open');
-      }, 5);
-      
+        // Animation classes
+        // -----------------
+        // This timeout is required because Openlayers makes the state change
+        // using the "display" property, which cannot be animated using css
+        // animations. I know it's hacky, but right now it's the best solution.
+        setTimeout(function() {
+          popup.getElement().classList.add('open');
+        }, 5);
+        
 
-      // Fill the popup with the winery data.
-      var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
-      popupHTML += '<h4>' + wineryData.AVA + '</h4>';
-      popupHTML += '<h5>Est: ' + wineryData.Estab_date + '</h5>';
+        // Fill the popup with the winery data.
+        var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
+        popupHTML += '<h4>' + wineryData.AVA + '</h4>';
+        popupHTML += '<h5>Est: ' + wineryData.Estab_date + '</h5>';
 
-      popup.getElement().innerHTML = popupHTML;
+        popup.getElement().innerHTML = popupHTML;
+      }
+      else {
+        // Hide popup if something is not selected during the interaction.
+        popup.getElement().classList.remove('open');
+
+        // This timeout waits for the .open class removal animation to
+        // complete before .setPosition() can change the popup's 
+        // display property, which messes up the animation.
+        setTimeout(function() {
+          popup.setPosition();
+        }, 500);
+      }
     }
     else {
       // Hide popup if something is not selected during the interaction.
