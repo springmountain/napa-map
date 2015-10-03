@@ -9,6 +9,10 @@ html, body {
 
 /* Utility classes to be used across the app */
 
+.hidden {
+	display: none;
+}
+
 .shadow {
 	box-shadow: gray 5px 5px 5px;
 	transition: box-shadow 0.5s linear;
@@ -83,4 +87,14 @@ html, body {
 	.popup .thumbnail img {
 		max-height: 100%;
 		max-width: 100%;
+	}
+
+	.popup .winery-edit {
+		position: absolute;
+		bottom: 1em;
+		right: 1em;
+	}
+
+	.popup .winery-edit-form {
+		padding-top: 10px;
 	}

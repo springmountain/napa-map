@@ -87,8 +87,33 @@ window.onload = function() {
         var popupHTML = '<h3>' + toTitleCase(wineryData.Name) + '</h3>';
         popupHTML += '<h4>' + wineryData.AVA + '</h4>';
         popupHTML += '<h5>Est: ' + wineryData.Estab_date + '</h5>';
+        popupHTML += '<div class="winery-edit"><a href="javascript:void(0)" id="winery-edit">Edit</a></div>';
+        popupHTML += '<div id="winery-edit-form" class="hidden winery-edit-form">' +
+            '<form method="post">' +
+              '<label for="companyList">Company</label>' +
+              '<select>' +
+                '<option>Constellation Brands</option>' +
+                '<option>Other Company</option>' +
+              '</select>' +
+              '<button type="submit">Update</button>'
+            '</form>' +
+          '</div>';
 
         popup.getElement().innerHTML = popupHTML;
+
+        var wineryEdit = document.getElementById('winery-edit');
+        
+        wineryEdit.addEventListener('click', function() {
+          var wineryEditForm = document.getElementById('winery-edit-form');
+          if (wineryEditForm.classList.contains('hidden')) {
+            this.innerHTML = 'Close';
+            wineryEditForm.classList.remove('hidden');
+          }
+          else {
+            this.innerHTML = 'Edit';
+            wineryEditForm.classList.add('hidden');
+          }
+        });
       }
       else {
         // Hide popup if something is not selected during the interaction.
