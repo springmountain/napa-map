@@ -16,16 +16,27 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 
   app.use(express.static('public'));
 
+  app.get('/wineries', function(req, res) {
+    client.query('SELECT * from wineries', function(err, result) {
+      if (err) throw err;
+      res.json(result.rows);
+    });
+  });
+
+  app.get('/wineries/:id', function(req, res) {
+    // console.log(req.params.id);
+    client.query('SELECT * from wineries where id = ' + req.params.id, function(err, result) {
+      if (err) throw err;
+      res.json(result.rows);
+    });
+  });
+
   server = app.listen(appPort, function() {
   	
   	var host = server.address().address;
   	var port = server.address().port;
 
   	console.log('Example app listening at http://%s:%s', host, port);
-
-
-    
-
 
     // SERIOUSLY, LEAVE THE STUFF BELOW THIS ALONE UNLESS YOU KNOW WHAT YOU'RE DOING.
 

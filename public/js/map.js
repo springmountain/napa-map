@@ -64,11 +64,20 @@ window.onload = function() {
       var wineryData = e.selected[0].getProperties();
 
       if (typeof wineryData.AVA != 'undefined') {
+        // Query napa maps api
+        var napaMapsReqeust = new XMLHttpRequest();
+        napaMapsReqeust.addEventListener('load', function() {
+          var wineryInfo = JSON.parse(this.responseText);
+          console.log(wineryInfo);
+        });
+        napaMapsReqeust.open('GET', '/wineries/' + wineryData.id);
+        napaMapsReqeust.send();
+
         // Query google's custom search to get images/stuff.
         var wineryRequest = new XMLHttpRequest();
         wineryRequest.addEventListener('load', googleHandler);
         wineryRequest.open('GET', 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCtH-7DOIQP9xEndlnJiICZr-8p7PxsgHw&cx=008567402695360145736:-ogjat11zvw&searchType=image&q=' + encodeURIComponent(wineryData.Name));
-        // wineryRequest.send();
+        //wineryRequest.send();
 
         // Display the popup at the position the user clicked.
         popup.setPosition(e.mapBrowserEvent.coordinate);
