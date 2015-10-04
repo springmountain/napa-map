@@ -1,7 +1,13 @@
 var express = require('express');
-var app = express();
+var exphbs = require('express-handlebars');
 var pg = require('pg');
 var fs = require('fs');
+var csv = require('csv');
+
+var app = express();
+
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
 // Command for starting this server when developing locally:
 // DATABASE_URL='postgres://fegxpzgfqwblvy:fNq0zttbidW3D8mQXOletWV7f7@ec2-46-137-159-123.eu-west-1.compute.amazonaws.com:5432/ddmgd5v2j7sq3i?ssl=true' nodemon index.js
@@ -15,6 +21,43 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
   console.log('Connected to postgres!');
 
   app.use(express.static('public'));
+
+  app.get('/admin', function(req, res) {
+    res.render('admin', { layout: 'adminLayout.handlebars' });
+  });
+
+  // Update database with info from the treasury website
+  // located here: http://www.ttb.gov/foia/xls/frl-wine-producers-and-blenders-ca-napa.htm
+  app.put('/update/treasury', function(req, res) {
+    res.sendStatus(200);
+    fs.readFile('import/wine_producers_treasury.csv', 'utf-8', function (err, data) {
+      if (err) throw err;
+
+      csv.parse(data, function(err, output) {
+        if (err) throw err;
+
+        client.query('DELETE FROM companies *', function(err, result) {
+          if (err) throw err;
+          console.log('companies table cleared.');
+
+          output.splice(0, 2);  // First two rows are unnecessary data
+          output.pop();         // Last row is unnecessary as well
+
+          output.forEach(function(row, index){
+            client.query({
+              text: 'INSERT INTO companies (name) VALUES ($1)',
+              values: [
+                row[1]
+              ]
+            }, function (err, result) {
+              if (err) throw err;
+              console.log('row inserted');
+            })
+          });
+        });
+      });
+    });
+  });
 
   app.get('/wineries', function(req, res) {
     client.query('SELECT * from wineries', function(err, result) {
