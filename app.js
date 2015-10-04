@@ -10,7 +10,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 // Command for starting this server when developing locally:
-// DATABASE_URL='postgres://fegxpzgfqwblvy:fNq0zttbidW3D8mQXOletWV7f7@ec2-46-137-159-123.eu-west-1.compute.amazonaws.com:5432/ddmgd5v2j7sq3i?ssl=true' nodemon index.js
+// DATABASE_URL='postgres://fegxpzgfqwblvy:fNq0zttbidW3mQXOletWV7f7@ec2-46-137-159-123.eu-west-1.compute.amazonaws.com:5432/ddmgd5v2j7sq3i?ssl=true' nodemon app.js
 
 var appPort = process.env.PORT || 3000;
 var server;
@@ -178,4 +178,16 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
   	// 	});
   	// });
   });
+
+  /*
+  * Router
+  */
+
+  // Error Handling
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+  });
+
+  module.exports = app;
+
 });
