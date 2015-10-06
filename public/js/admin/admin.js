@@ -39,6 +39,16 @@ $(document).ready(function() {
 		});
 	});
 
+	$('#settingsBtn').click(function(e) {
+		$.ajax({
+			method: 'GET',
+			url: '/admin/settings',
+			data: { ajax: true }
+		}).done(function (msg) {
+			$('#view').html(msg);
+		});
+	});
+
 	// var grabTreasuryData = document.getElementById('grabTreasuryData');
 
 	// grabTreasuryData.addEventListener('click', function() {
@@ -50,16 +60,5 @@ $(document).ready(function() {
 	// 	treasuryReq.open('PUT', '/update/treasury');
 	// 	treasuryReq.send();
 
-	// });
-
-	// var recreateTables = document.getElementById('recreateTables');
-
-	// recreateTables.addEventListener('click', function() {
-	// 	var recreateReq = new XMLHttpRequest();
-	// 	recreateReq.addEventListener('load', function() {
-	// 		console.log(this.responseText);
-	// 	});
-	// 	recreateReq.open('PUT', '/update/recreate');
-	// 	recreateReq.send();
 	// });
 });

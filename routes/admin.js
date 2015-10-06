@@ -17,3 +17,12 @@ exports.database = function(req, res) {
 		res.render('admin/database', { layout: 'adminLayout.handlebars' });
 	}
 };
+
+exports.settings = function(req, res) {
+	if (req.query.ajax == 'true') {
+		res.render('admin/settings');
+	}
+	else {
+		res.render('admin/settings', { layout: 'adminLayout.handlebars' });
+	}
+};

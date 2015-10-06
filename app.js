@@ -38,6 +38,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
   app.get('/wineries/:id', wineries.getId);
   app.get('/admin', auth, admin.dashboard);
   app.get('/admin/database', auth, admin.database);
+  app.get('/admin/settings', auth, admin.settings);
   app.put('/update/treasury', update.treasury);
   app.put('/update/recreate', update.recreate);
 

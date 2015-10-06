@@ -20,16 +20,16 @@ exports.recreate = function(req, res) {
 				res.sendStatus(500);
 			}
 
-			// res.status(200).send(data);
+			res.status(200).send(data);
 
-			client.query(sql, function(err, result) {
-				if (err) {
-					res.sendStatus(500);
-					throw err;
-				}
+			// client.query(sql, function(err, result) {
+			// 	if (err) {
+			// 		res.sendStatus(500);
+			// 		throw err;
+			// 	}
 
-				res.status(200).send(result);
-			});
+			// 	res.status(200).send(result);
+			// });
 		});
 	});
 
