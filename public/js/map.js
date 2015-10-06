@@ -1,7 +1,11 @@
 // Declare variables I want to be accessible from the console.
 var svg, container, map, markers;
 
-window.onload = function() {
+window.addEventListener('load', mapLoad);
+
+// window.onload = function() {
+
+function mapLoad() {
 
   var osmLayer = new ol.layer.Tile({
     source: new ol.source.OSM()
@@ -104,7 +108,7 @@ window.onload = function() {
                 '<option>Constellation Brands</option>' +
                 '<option>Other Company</option>' +
               '</select>' +
-              '<button type="submit">Update</button>'
+              '<button type="submit">Update</button>' +
             '</form>' +
           '</div>';
 
@@ -179,4 +183,4 @@ window.onload = function() {
       popup.getElement().appendChild(thumbnailContainer);
     }
   }
-};
+}

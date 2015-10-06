@@ -4,6 +4,37 @@ var pg = require('pg');
 var fs = require('fs');
 var csv = require('csv');
 
+exports.recreate = function(req, res) {
+
+	fs.readFile('import/recreate_tables.sql', 'utf-8', function(err, data) {
+		if (err) {
+			res.sendStatus(500);
+			throw err;
+		}
+
+		var sql = data.toString();
+
+		pg.connect(process.env.DATABASE_URL, function(err, client) {
+			if (err) {
+				throw err;
+				res.sendStatus(500);
+			}
+
+			// res.status(200).send(data);
+
+			client.query(sql, function(err, result) {
+				if (err) {
+					res.sendStatus(500);
+					throw err;
+				}
+
+				res.status(200).send(result);
+			});
+		});
+	});
+
+};
+
 exports.treasury = function(req, res) {
 
 	// Update database with info from the treasury website

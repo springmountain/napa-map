@@ -6,6 +6,7 @@ var fs = require('fs');
 var csv = require('csv');
 
 // Get routes
+var map = require('./routes/map');
 var wineries = require('./routes/wineries');
 var admin = require('./routes/admin');
 var update = require('./routes/update');
@@ -15,7 +16,7 @@ var app = express();
 // Setup basic authentication.
 var auth = basicAuth('springmountain', '4Wonka20');
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine('handlebars', exphbs({ defaultLayout: 'map' }));
 app.set('view engine', 'handlebars');
 
 // Command for starting this server when developing locally:
@@ -31,10 +32,14 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 
   app.use(express.static('public'));
 
+  app.get('/', map.view);
+  app.get('/map', map.ajax);
   app.get('/wineries', wineries.all);
   app.get('/wineries/:id', wineries.getId);
-  app.get('/admin', auth, admin.page);
+  app.get('/admin', auth, admin.dashboard);
+  app.get('/admin/database', auth, admin.database);
   app.put('/update/treasury', update.treasury);
+  app.put('/update/recreate', update.recreate);
 
   // Update database with info from the treasury website
   // located here: http://www.ttb.gov/foia/xls/frl-wine-producers-and-blenders-ca-napa.htm
