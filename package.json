@@ -23,6 +23,7 @@
   "homepage": "https://github.com/springmountain/napa-map",
   "dependencies": {
     "basic-auth-connect": "^1.0.0",
+    "csv": "^0.4.6",
     "express": "^4.12.4",
     "express-handlebars": "^2.0.1",
     "pg": "4.4.1"
