@@ -1,16 +1,25 @@
 var express = require('express');
+var basicAuth = require('basic-auth-connect');
 var exphbs = require('express-handlebars');
 var pg = require('pg');
 var fs = require('fs');
 var csv = require('csv');
 
+// Get routes
+var wineries = require('./routes/wineries');
+var admin = require('./routes/admin');
+var update = require('./routes/update');
+
 var app = express();
+
+// Setup basic authentication.
+var auth = basicAuth('springmountain', '4Wonka20');
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 // Command for starting this server when developing locally:
-// DATABASE_URL='postgres://fegxpzgfqwblvy:fNq0zttbidW3mQXOletWV7f7@ec2-46-137-159-123.eu-west-1.compute.amazonaws.com:5432/ddmgd5v2j7sq3i?ssl=true' nodemon app.js
+// DATABASE_URL='postgres://wfcjrnefrcxlsd:jo6HwLfpc2z5pfEDYjt5ETXfd6@ec2-46-137-159-123.eu-west-1.compute.amazonaws.com:5432/ddmgd5v2j7sq3i?ssl=true' nodemon app.js
 
 var appPort = process.env.PORT || 3000;
 var server;
@@ -22,57 +31,43 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 
   app.use(express.static('public'));
 
-  app.get('/admin', function(req, res) {
-    res.render('admin', { layout: 'adminLayout.handlebars' });
-  });
+  app.get('/wineries', wineries.all);
+  app.get('/wineries/:id', wineries.getId);
+  app.get('/admin', auth, admin.page);
+  app.put('/update/treasury', update.treasury);
 
   // Update database with info from the treasury website
   // located here: http://www.ttb.gov/foia/xls/frl-wine-producers-and-blenders-ca-napa.htm
-  app.put('/update/treasury', function(req, res) {
-    res.sendStatus(200);
-    fs.readFile('import/wine_producers_treasury.csv', 'utf-8', function (err, data) {
-      if (err) throw err;
+  // app.put('/update/treasury', function(req, res) {
+  //   res.sendStatus(200);
+  //   fs.readFile('import/wine_producers_treasury.csv', 'utf-8', function (err, data) {
+  //     if (err) throw err;
 
-      csv.parse(data, function(err, output) {
-        if (err) throw err;
+  //     csv.parse(data, function(err, output) {
+  //       if (err) throw err;
 
-        client.query('DELETE FROM companies *', function(err, result) {
-          if (err) throw err;
-          console.log('companies table cleared.');
+  //       client.query('DELETE FROM companies *', function(err, result) {
+  //         if (err) throw err;
+  //         console.log('companies table cleared.');
 
-          output.splice(0, 2);  // First two rows are unnecessary data
-          output.pop();         // Last row is unnecessary as well
+  //         output.splice(0, 2);  // First two rows are unnecessary data
+  //         output.pop();         // Last row is unnecessary as well
 
-          output.forEach(function(row, index){
-            client.query({
-              text: 'INSERT INTO companies (name) VALUES ($1)',
-              values: [
-                row[1]
-              ]
-            }, function (err, result) {
-              if (err) throw err;
-              console.log('row inserted');
-            })
-          });
-        });
-      });
-    });
-  });
-
-  app.get('/wineries', function(req, res) {
-    client.query('SELECT * from wineries', function(err, result) {
-      if (err) throw err;
-      res.json(result.rows);
-    });
-  });
-
-  app.get('/wineries/:id', function(req, res) {
-    // console.log(req.params.id);
-    client.query('SELECT * from wineries where id = ' + req.params.id, function(err, result) {
-      if (err) throw err;
-      res.json(result.rows);
-    });
-  });
+  //         output.forEach(function(row, index){
+  //           client.query({
+  //             text: 'INSERT INTO companies (name) VALUES ($1)',
+  //             values: [
+  //               row[1]
+  //             ]
+  //           }, function (err, result) {
+  //             if (err) throw err;
+  //             console.log('row inserted');
+  //           })
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
 
   server = app.listen(appPort, function() {
   	
@@ -178,16 +173,4 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
   	// 	});
   	// });
   });
-
-  /*
-  * Router
-  */
-
-  // Error Handling
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-  });
-
-  module.exports = app;
-
 });
