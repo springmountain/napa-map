@@ -6,13 +6,13 @@
 
 $(document).ready(function() {
 
-	window.history.pushState({
-		method: 'GET',
-		url: '/admin',
-		data: {
-			ajax: 'true'
-		}
-	}, null, '/admin');
+	// window.history.pushState({
+	// 	method: 'GET',
+	// 	url: '/admin',
+	// 	data: {
+	// 		ajax: 'true'
+	// 	}
+	// }, null, '/admin');
 
 	console.log('admin.js loaded successfully');
 

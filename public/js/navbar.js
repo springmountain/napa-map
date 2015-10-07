@@ -2,8 +2,18 @@
 *	Navbar specific javascript
 */
 
-$('.ajax-nav ul li').click(function(e) {
-	var url = $(this).children('a').data('url');
+$('.ajax-nav ul li a').click(function(e) {
+	e.preventDefault();
+
+	var url = $(this).attr('href');
+
+	$.ajax({
+		method: 'GET',
+		url: url,
+		data: { ajax: true }
+	}).done(function(msg) {
+		$("#view").html(msg);
+	});
 
 	window.history.pushState({
 		method: 'GET',
@@ -24,6 +34,7 @@ $('.ajax-nav ul li').click(function(e) {
 */
 
 window.onpopstate = function(evt) {
+	console.log('fired onpopstate');
 	if (evt.state.url) {
 		$.ajax({
 			method: evt.state.method,
