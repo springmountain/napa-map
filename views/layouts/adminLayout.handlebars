@@ -8,18 +8,24 @@
 		<link rel="stylesheet" href="/css/wineries.css">
 		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="/css/main.css">
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	</head>
 	<body>
-		<div class="row">
+		<div class="row ajax-nav">
 			<div class="navbar-fixed">
+				<ul id="databaseDropdown" class="dropdown-content">
+					<li><a data-url="/admin/database/wineries" href="javascript:void(0)">Wineries</a></li>
+					<li><a href="javascript:void(0)">Companies</a></li>
+					<li><a href="javascript:void(0)">Avas</a></li>
+				</ul>
 				<nav>
 					<div class="nav-wrapper">
 						<div class="col s12">
 							<a id="adminBtn" href="javascript:void(0)" class="brand-logo">Admin</a>
 							<ul id="nav-mobile" class="right hide-on-med-and-down">
-								<li><a data-url='/map' id="mapBtn" href="javascript:void(0)" class="waves-effect waves-light">Map</a></li>
-								<li><a data-url='/admin/database' id="databaseBtn" href="javascript:void(0)" class="waves-effect waves-light">Database</a></li>
-								<li><a data-url='/admin/settings' id="settingsBtn" href="javascript:void(0)" class="waves-effect waves-light">Settings</a></li>
+								<li><a data-url='/map' href="javascript:void(0)" class="waves-effect waves-light">Map</a></li>
+								<li><a data-url='/admin/database' href="javascript:void(0)" class="waves-effect waves-light dropdown-button" data-activates="databaseDropdown">Database<i class="material-icons right">arrow_drop_down</i></a></li>
+								<li><a data-url='/admin/settings' href="javascript:void(0)" class="waves-effect waves-light">Settings</a></li>
 							</ul>
 						</div>
 					</div>
@@ -29,7 +35,6 @@
 				{{{ body }}}
 			</div>
 		</div>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="/materialize/js/bin/materialize.min.js"></script>
 	<script src="/js/admin/admin.js"></script>
 	<script src="/js/navbar.js"></script>

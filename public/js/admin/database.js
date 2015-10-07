@@ -7,6 +7,6 @@ $('#recreateTables').click(function(e) {
 		method: 'PUT',
 		url: '/update/recreate'
 	}).done(function(msg) {
-		$('#view').html(msg);
+		$('#view').html(msg.toString());
 	});
 });

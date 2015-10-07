@@ -2,7 +2,7 @@
 *	Navbar specific javascript
 */
 
-$('.nav-wrapper ul li').click(function(e) {
+$('.ajax-nav ul li').click(function(e) {
 	var url = $(this).children('a').data('url');
 
 	window.history.pushState({
@@ -17,7 +17,6 @@ $('.nav-wrapper ul li').click(function(e) {
 		$(this).removeClass('active');
 	});
 	$(this).addClass('active');
-	console.log('nav button clicked');
 });
 
 /*

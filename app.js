@@ -1,7 +1,7 @@
 var express = require('express');
 var basicAuth = require('basic-auth-connect');
 var exphbs = require('express-handlebars');
-var pg = require('pg');
+var DB = require('./classes/db');
 var fs = require('fs');
 var csv = require('csv');
 
@@ -26,7 +26,7 @@ var appPort = process.env.PORT || 3000;
 var server;
 var avas;
 
-pg.connect(process.env.DATABASE_URL, function(err, client) {
+DB.connect(function(err, client) {
   if (err) throw err;
   console.log('Connected to postgres!');
 
@@ -38,6 +38,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
   app.get('/wineries/:id', wineries.getId);
   app.get('/admin', auth, admin.dashboard);
   app.get('/admin/database', auth, admin.database);
+  app.get('/admin/database/wineries', auth, admin.wineries);
   app.get('/admin/settings', auth, admin.settings);
   app.put('/update/treasury', update.treasury);
   app.put('/update/recreate', update.recreate);

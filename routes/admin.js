@@ -1,5 +1,7 @@
 // routes/admin.js
 
+var DB = require('../classes/db');
+
 exports.dashboard = function(req, res) {
 	if (req.query.ajax == 'true') {
 		res.render('admin/dashboard');
@@ -16,6 +18,24 @@ exports.database = function(req, res) {
 	else {
 		res.render('admin/database', { layout: 'adminLayout.handlebars' });
 	}
+};
+
+exports.wineries = function(req, res) {
+	DB.getWineries(function(wineries) {
+
+		var layout = '';
+
+		if (req.query.ajax != 'true') {
+			layout = 'adminLayout.handlebars'
+		}
+
+		var data = {
+			wineries: wineries.rows,
+			layout: layout
+		};
+
+		res.render('admin/wineries', data);
+	});
 };
 
 exports.settings = function(req, res) {

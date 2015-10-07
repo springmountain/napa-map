@@ -6,7 +6,7 @@ var csv = require('csv');
 
 exports.recreate = function(req, res) {
 
-	fs.readFile('import/recreate_tables.sql', 'utf-8', function(err, data) {
+	fs.readFile('import/wineries.sql', 'utf-8', function(err, data) {
 		if (err) {
 			res.sendStatus(500);
 			throw err;
@@ -20,16 +20,18 @@ exports.recreate = function(req, res) {
 				res.sendStatus(500);
 			}
 
-			res.status(200).send(data);
+			// res.status(200).send(data);
 
-			// client.query(sql, function(err, result) {
-			// 	if (err) {
-			// 		res.sendStatus(500);
-			// 		throw err;
-			// 	}
+			client.query(sql, function(err, result) {
+				if (err) {
+					res.sendStatus(500);
+					throw err;
+				}
 
-			// 	res.status(200).send(result);
-			// });
+				console.log(result.rows);
+
+				res.status(200).send(result);
+			});
 		});
 	});
 
