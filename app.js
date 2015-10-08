@@ -1,7 +1,7 @@
 var express = require('express');
 var basicAuth = require('basic-auth-connect');
 var exphbs = require('express-handlebars');
-var DB = require('./classes/db');
+var DB = require('./modules/db');
 var fs = require('fs');
 var csv = require('csv');
 
@@ -32,16 +32,23 @@ DB.connect(function(err, client) {
 
   app.use(express.static('public'));
 
+  // GET routes
+
   app.get('/', map.view);
   app.get('/map', map.ajax);
   app.get('/wineries', wineries.all);
-  app.get('/wineries/:id', wineries.getId);
+  app.get('/wineries/id/:id', wineries.getId);
+  app.get('/wineries/geojson', wineries.geojson);
   app.get('/admin', auth, admin.dashboard);
   app.get('/admin/database', auth, admin.database);
   app.get('/admin/database/wineries', auth, admin.wineries);
   app.get('/admin/settings', auth, admin.settings);
+
+  // PUT routes
+
   app.put('/update/treasury', update.treasury);
   app.put('/update/recreate', update.recreate);
+  app.put('/update/merge', update.merge);
 
   // Update database with info from the treasury website
   // located here: http://www.ttb.gov/foia/xls/frl-wine-producers-and-blenders-ca-napa.htm

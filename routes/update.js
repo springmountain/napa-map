@@ -3,6 +3,40 @@
 var pg = require('pg');
 var fs = require('fs');
 var csv = require('csv');
+var geoJSON = require('../modules/geojson');
+
+exports.merge = function(req, res) {
+	// fs.readdir('./public/data/geojson', function(err, files) {
+	// 	if (err) throw err;
+	// 	// files = JSON.parse(files);
+	// 	res.json(files);
+	// });
+
+	geoJSON.getWineries(function(wineries) {
+		res.json(wineries);
+	});
+
+	// fs.readFile('./public/data/geojson/ava_Napa_County_qgis.json', 'utf-8', function(err, data) {
+	// 	if (err) throw err;
+	// 	var avas = JSON.parse(data);
+
+	// 	res.json(avas);
+	// 	// avas.features.forEach(function(element, index){
+	// 	// 	console.log(element.properties.AVA_Name);
+
+	// 	// 	client.query({
+	// 	// 		text: 'INSERT into avas (name) VALUES ($1);',
+	// 	// 		values: [
+	// 	// 			element.properties.AVA_Name
+	// 	// 		]
+	// 	// 	}, function(err, result) {
+	// 	// 		if (err) throw err;
+	// 	// 		console.log('row inserted');
+	// 	// 	});
+
+	// 	// });
+	// });
+}
 
 exports.recreate = function(req, res) {
 

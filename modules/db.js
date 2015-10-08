@@ -1,5 +1,5 @@
 /*
-*	DB Class
+*	DB Module
 */
 
 var pg = require('pg');
@@ -19,3 +19,13 @@ exports.getWineries = function(cb) {
 		});
 	});
 }
+
+exports.getWinery = function(id, cb) {
+	connect(function(err, client) {
+		if (err) throw err;
+		client.query('SELECT * FROM wineries where id = ' + id, function(err, res) {
+			if (err) throw err;
+			cb(res);
+		});
+	});
+};

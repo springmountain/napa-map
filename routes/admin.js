@@ -1,6 +1,6 @@
 // routes/admin.js
 
-var DB = require('../classes/db');
+var DB = require('../modules/db');
 
 exports.dashboard = function(req, res) {
 	if (req.query.ajax == 'true') {
