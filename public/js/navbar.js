@@ -29,6 +29,10 @@ $('.ajax-nav ul li a').click(function(e) {
 	$(this).addClass('active');
 });
 
+$('.button-collapse').sideNav({
+	closeOnClick: true
+});
+
 /*
 *	History Forward/Backward controller
 */

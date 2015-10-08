@@ -1,6 +1,7 @@
 <html class="admin">
 	<head>
 		<title>Napa Maps | Administration</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!--Import Google Icon Font-->
 		{{!-- <link rel="stylesheet" href="/css/reset.min.css"> --}}
 		<link rel="stylesheet" href="/css/main.css">
@@ -23,10 +24,16 @@
 				<nav>
 					<div class="nav-wrapper">
 						<div class="col s12">
+							<a href="#" data-activates="mobile-nav" class="button-collapse"><i class="material-icons">menu</i></a>
 							<a id="adminBtn" href="javascript:void(0)" class="brand-logo">Admin</a>
-							<ul id="nav-mobile" class="right hide-on-med-and-down">
+							<ul class="right hide-on-med-and-down">
 								<li><a href="/map" class="waves-effect waves-light">Map</a></li>
 								<li><a href="#!" class="waves-effect waves-light dropdown-button" data-beloworigin="true" data-activates="databaseDropdown">Database<i class="material-icons right">arrow_drop_down</i></a></li>
+								<li><a href="/admin/settings" class="waves-effect waves-light">Settings</a></li>
+							</ul>
+							<ul class="side-nav" id="mobile-nav">
+								<li><a href="/map" class="waves-effect waves-light">Map</a></li>
+								<li><a href="#!" class="waves-effect waves-light dropdown-button">Database<i class="material-icons right">arrow_drop_down</i></a></li>
 								<li><a href="/admin/settings" class="waves-effect waves-light">Settings</a></li>
 							</ul>
 						</div>
