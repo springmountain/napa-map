@@ -2,7 +2,7 @@
 
 var pg = require('pg');
 var DB = require('../modules/db');
-var geoJSON = require('../modules/geojson');
+var nm = require('../modules/nm');
 
 /*
 *	Return JSON
@@ -29,9 +29,15 @@ exports.getId = function(req, res) {
 };
 
 exports.geojson = function(req, res) {
-	geoJSON.getWineries(function(wineries) {
+	nm.getWineries(function(wineries) {
 		res.json(wineries);
 	}); 
+};
+
+exports.companies = function(req, res) {
+	nm.getCompanies(function(companies) {
+		res.json(companies);
+	});
 };
 
 /*

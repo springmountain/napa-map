@@ -39,6 +39,7 @@ DB.connect(function(err, client) {
   app.get('/wineries', wineries.all);
   app.get('/wineries/id/:id', wineries.getId);
   app.get('/wineries/geojson', wineries.geojson);
+  app.get('/wineries/companies', wineries.companies);
   app.get('/admin', auth, admin.dashboard);
   app.get('/admin/database', auth, admin.database);
   app.get('/admin/database/wineries', auth, admin.wineries);

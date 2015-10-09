@@ -1,0 +1,30 @@
+<table class="striped highlight">
+	<thead>
+		<tr>
+			<th>Permit #</th>
+			<th>Owner</th>
+			<th>Operating Name</th>
+			<th>Street</th>
+			<th>City</th>
+			<th>State</th>
+			<th>Zip</th>
+			<th>Zip4</th>
+			<th>County</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#each data}}
+			<tr>
+				<td>{{permitNumber}}</td>
+				<td>{{ownerName}}</td>
+				<td>{{operatingName}}</td>
+				<td>{{street}}</td>
+				<td>{{city}}</td>
+				<td>{{state}}</td>
+				<td>{{zip}}</td>
+				<td>{{zip4}}</td>
+				<td>{{county}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>

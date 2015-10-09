@@ -11,20 +11,31 @@ $('#recreateTables').click(function(e) {
 	});
 });
 
+$('#recreateCompanies').click(function(e) {
+	$.ajax({
+		method: 'PUT',
+		url: '/update/companies'
+	}).done(function(msg) {
+		$('#view').html();
+	});
+});
+
 $('#mergeCompaniesWineries').click(function(e) {
+	$(".preloader-wrapper-wrap").removeClass("hide");
 	$.ajax({
 		method: 'PUT',
 		url: '/update/merge'
 	}).done(function(msg) {
-		$('#view').html(msg.toString());
+		$(".preloader-wrapper-wrap").addClass("hide");
+		$('#view').html(msg);
 	});
 });
 
 $('#geojsonGetWineries').click(function(e) {
 	$.ajax({
 		method: 'GET',
-		url: '/geojson/wineries'
+		url: '/wineries/geojson'
 	}).done(function(msg) {
-		console.log(msg);
+		$('#view').html(msg.toString());
 	});
 });

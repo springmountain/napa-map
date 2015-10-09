@@ -8,8 +8,15 @@ CREATE schema public;
 CREATE TABLE companies
 (
 	id				bigserial PRIMARY KEY,
-	name			text,
 	permit_number	text,
+	owner_name		text,
+	operating_name	text,
+	street			text,
+	city			text,
+	state			text,
+	zip				integer,
+	zip4			integer,
+	county			text
 );
 
 CREATE TABLE avas
